@@ -8,16 +8,20 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@vueuse/core": "^14.1.0",
     "axios": "^1.6.7",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "pinia": "^2.1.7",
     "reka-ui": "^2.7.0",
     "tailwind-merge": "^3.4.0",
+    "vaul-vue": "^0.4.1",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0"
   },
   "devDependencies": {
+    "@iconify-json/radix-icons": "^1.2.6",
+    "@iconify/vue": "^5.0.0",
     "@types/node": "^25.0.8",
     "@vitejs/plugin-vue": "^5.0.4",
     "@vue/tsconfig": "^0.8.1",

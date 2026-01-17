@@ -1,10 +1,6 @@
 <script setup lang="ts">
 import type { Note } from '@/services/types/note.types'
 import { formatDate } from '@/utils/date.utils'
-import Card from '@/components/ui/Card.vue'
-import CardHeader from '@/components/ui/CardHeader.vue'
-import CardTitle from '@/components/ui/CardTitle.vue'
-import CardContent from '@/components/ui/CardContent.vue'
 import Button from '@/components/ui/Button.vue'
 import Badge from '@/components/ui/Badge.vue'
 
@@ -34,42 +30,50 @@ function handleDelete() {
 </script>
 
 <template>
-  <Card v-if="note" class="w-full">
-    <CardHeader>
-      <div class="flex items-start justify-between">
-        <CardTitle class="flex-1">{{ note.title }}</CardTitle>
-        <div class="flex gap-2">
-          <Button variant="outline" size="sm" @click="handleEdit">
-            Edit
-          </Button>
-          <Button variant="destructive" size="sm" @click="handleDelete">
-            Delete
-          </Button>
-        </div>
-      </div>
-    </CardHeader>
-    <CardContent class="space-y-4">
+  <div v-if="note" class="w-full">
+    <!-- Title -->
+    <div class="mb-4 sm:mb-6">
+      <h3 class="text-lg sm:text-xl font-semibold leading-tight">{{ note.title }}</h3>
+    </div>
+    
+    <!-- Content -->
+    <div class="mb-4 sm:mb-6">
       <div v-if="note.content" class="prose max-w-none">
-        <p class="whitespace-pre-wrap">{{ note.content }}</p>
+        <p class="whitespace-pre-wrap text-sm sm:text-base leading-relaxed text-foreground">{{ note.content }}</p>
       </div>
-      <div v-else class="text-muted-foreground italic">
+      <div v-else class="text-muted-foreground italic text-sm sm:text-base">
         No content
       </div>
-      
-      <div class="flex flex-wrap gap-2 pt-4 border-t">
-        <Badge variant="outline">
-          Created: {{ formatDate(note.createdAt) }}
-        </Badge>
-        <Badge v-if="note.updatedAt !== note.createdAt" variant="outline">
-          Updated: {{ formatDate(note.updatedAt) }}
-        </Badge>
-      </div>
-    </CardContent>
-  </Card>
-  
-  <Card v-else class="w-full">
-    <CardContent class="p-6 text-center text-muted-foreground">
-      Select a note to view details
-    </CardContent>
-  </Card>
+    </div>
+    
+    <!-- Metadata badges -->
+    <div class="flex flex-wrap gap-2 mb-4 sm:mb-6 pt-4 border-t">
+      <Badge variant="outline" class="text-xs sm:text-sm">
+        Created: {{ formatDate(note.createdAt) }}
+      </Badge>
+      <Badge v-if="note.updatedAt !== note.createdAt" variant="outline" class="text-xs sm:text-sm">
+        Updated: {{ formatDate(note.updatedAt) }}
+      </Badge>
+    </div>
+    
+    <!-- Action buttons -->
+    <div class="flex flex-col sm:flex-row gap-2 sm:gap-3 pt-4 border-t">
+      <Button 
+        variant="outline" 
+        size="default" 
+        class="flex-1 min-h-[44px] touch-manipulation" 
+        @click="handleEdit"
+      >
+        Edit
+      </Button>
+      <Button 
+        variant="destructive" 
+        size="default" 
+        class="flex-1 min-h-[44px] touch-manipulation" 
+        @click="handleDelete"
+      >
+        Delete
+      </Button>
+    </div>
+  </div>
 </template>

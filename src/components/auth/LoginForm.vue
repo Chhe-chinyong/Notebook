@@ -5,10 +5,6 @@ import { useAuthStore } from '@/stores/auth'
 import Button from '@/components/ui/Button.vue'
 import Input from '@/components/ui/Input.vue'
 import Label from '@/components/ui/Label.vue'
-import Card from '@/components/ui/Card.vue'
-import CardHeader from '@/components/ui/CardHeader.vue'
-import CardTitle from '@/components/ui/CardTitle.vue'
-import CardContent from '@/components/ui/CardContent.vue'
 
 const router = useRouter()
 const authStore = useAuthStore()
@@ -41,61 +37,48 @@ async function handleSubmit() {
   }
 }
 
-function goToRegister() {
-  router.push('/register')
-}
 </script>
 
 <template>
-  <Card class="w-full max-w-md mx-auto">
-    <CardHeader>
-      <CardTitle>Login</CardTitle>
-    </CardHeader>
-    <CardContent>
-      <form @submit.prevent="handleSubmit" class="space-y-4">
-        <div v-if="error" class="p-3 text-sm text-destructive bg-destructive/10 rounded-md">
-          {{ error }}
-        </div>
-        
-        <div class="space-y-2">
-          <Label for="email">Email</Label>
-          <Input
-            id="email"
-            v-model="email"
-            type="email"
-            placeholder="Enter your email"
-            required
-            :disabled="loading"
-          />
-        </div>
+  <div class="w-full max-w-md mx-auto">
+    <form @submit.prevent="handleSubmit" class="space-y-5">
+      <div v-if="error" class="p-3 text-sm text-destructive bg-destructive/10 rounded-md text-center">
+        {{ error }}
+      </div>
+      
+      <div class="space-y-2 text-left">
+        <Label for="email" class="text-foreground">Email</Label>
+        <Input
+          id="email"
+          v-model="email"
+          type="email"
+          placeholder="m@example.com"
+          required
+          :disabled="loading"
+          class="w-full"
+        />
+      </div>
 
-        <div class="space-y-2">
-          <Label for="password">Password</Label>
-          <Input
-            id="password"
-            v-model="password"
-            type="password"
-            placeholder="Enter your password"
-            required
-            :disabled="loading"
-          />
-        </div>
+      <div class="space-y-2 text-left">
+        <Label for="password" class="text-foreground">Password</Label>
+        <Input
+          id="password"
+          v-model="password"
+          type="password"
+          placeholder="Enter your password"
+          required
+          :disabled="loading"
+          class="w-full"
+        />
+      </div>
 
-        <Button type="submit" class="w-full" :disabled="loading">
-          {{ loading ? 'Logging in...' : 'Login' }}
-        </Button>
-
-        <div class="text-center text-sm">
-          <span class="text-muted-foreground">Don't have an account? </span>
-          <button
-            type="button"
-            @click="goToRegister"
-            class="text-primary hover:underline"
-          >
-            Register
-          </button>
-        </div>
-      </form>
-    </CardContent>
-  </Card>
+      <Button 
+        type="submit" 
+        class="w-full bg-muted text-foreground hover:bg-muted/90 font-medium" 
+        :disabled="loading"
+      >
+        {{ loading ? 'Logging in...' : 'Login' }}
+      </Button>
+    </form>
+  </div>
 </template>

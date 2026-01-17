@@ -3,6 +3,7 @@ import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import Button from '@/components/ui/Button.vue'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import ThemeToggle from '@/components/ui/ThemeToggle.vue'
 
 const router = useRouter()
 const authStore = useAuthStore()
@@ -29,6 +30,7 @@ function getUserInitials(name: string | undefined): string {
       <div class="container mx-auto px-4 py-4 flex items-center justify-between">
         <h1 class="text-2xl font-bold">Notebook App</h1>
         <div class="flex items-center gap-4">
+          <ThemeToggle />
           <div class="flex items-center gap-3">
             <Avatar>
               <AvatarFallback>
