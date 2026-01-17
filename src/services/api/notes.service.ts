@@ -1,79 +1,52 @@
 import type { Note, CreateNoteRequest, UpdateNoteRequest } from '../types/note.types'
-
-const STORAGE_KEY = 'notebook_notes'
-
-function getNotes(): Note[] {
-  const stored = localStorage.getItem(STORAGE_KEY)
-  if (stored) {
-    return JSON.parse(stored)
-  }
-  return []
-}
-
-function saveNotes(notes: Note[]): void {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(notes))
-}
+import apiClient from './client'
 
 export const notesService = {
   async getNotes(userId: number): Promise<Note[]> {
-    const notes = getNotes()
-    return notes.filter(note => note.userId === userId)
+    // GET /api/notes
+    // Backend filters notes by authenticated user from JWT token
+    // Response will be { success: true, data: Note[] }
+    // Axios interceptor extracts the data field
+    const response = await apiClient.get<Note[]>('/api/notes')
+    return response.data
   },
 
   async getNoteById(id: string, userId: number): Promise<Note | null> {
-    const notes = getNotes()
-    const note = notes.find(n => n.id === id && n.userId === userId)
-    return note || null
+    // GET /api/notes/:id
+    // Backend verifies ownership via JWT token
+    // Response will be { success: true, data: Note }
+    try {
+      const response = await apiClient.get<Note>(`/api/notes/${id}`)
+      return response.data
+    } catch (error: any) {
+      // If 404, return null (note not found)
+      if (error.statusCode === 404) {
+        return null
+      }
+      throw error
+    }
   },
 
   async createNote(data: CreateNoteRequest, userId: number): Promise<Note> {
-    const notes = getNotes()
-    const now = new Date().toISOString()
-    
-    const newNote: Note = {
-      id: `note_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-      title: data.title,
-      content: data.content || '',
-      createdAt: now,
-      updatedAt: now,
-      userId
-    }
-
-    notes.push(newNote)
-    saveNotes(notes)
-
-    return newNote
+    // POST /api/notes
+    // Backend associates note with authenticated user from JWT token
+    // Response will be { success: true, data: Note }
+    const response = await apiClient.post<Note>('/api/notes', data)
+    return response.data
   },
 
   async updateNote(id: string, userId: number, updates: UpdateNoteRequest): Promise<Note> {
-    const notes = getNotes()
-    const noteIndex = notes.findIndex(n => n.id === id && n.userId === userId)
-
-    if (noteIndex === -1) {
-      throw new Error('Note not found or access denied')
-    }
-
-    const updatedNote: Note = {
-      ...notes[noteIndex],
-      ...updates,
-      updatedAt: new Date().toISOString()
-    }
-
-    notes[noteIndex] = updatedNote
-    saveNotes(notes)
-
-    return updatedNote
+    // PUT /api/notes/:id or PATCH /api/notes/:id
+    // Backend verifies ownership via JWT token
+    // Response will be { success: true, data: Note }
+    const response = await apiClient.put<Note>(`/api/notes/${id}`, updates)
+    return response.data
   },
 
   async deleteNote(id: string, userId: number): Promise<void> {
-    const notes = getNotes()
-    const noteIndex = notes.findIndex(n => n.id === id && n.userId === userId)
-
-    if (noteIndex === -1) {
-      throw new Error('Note not found or access denied')
-    }
-
-    notes.splice(noteIndex, 1)
-    saveNotes(notes)
+    // DELETE /api/notes/:id
+    // Backend verifies ownership via JWT token
+    // Response will be { success: true, data: null } or just success
+    await apiClient.delete(`/api/notes/${id}`)
   }
 }
