@@ -54,14 +54,6 @@ src/
 3. View, edit, or delete your notes
 4. Search and sort notes using the controls in the notes list
 
-## Backend Integration
-
-The app is structured to easily swap mock services with real API calls. To integrate with a backend:
-
-1. Replace `src/services/api/auth.service.ts` with real API calls
-2. Replace `src/services/api/notes.service.ts` with real API calls
-3. Update service methods to use Axios for HTTP requests
-4. Add proper error handling for network requests
 
 ## License
 
