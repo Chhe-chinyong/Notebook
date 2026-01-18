@@ -2,6 +2,11 @@
 
 A Vue 3 + TypeScript notebook application with authentication and CRUD operations for notes.
 
+## Demo
+
+🔗 [Live Demo](https://notebook-two-azure.vercel.app/login)
+
+
 ## Getting Started
 
 ### Installation
